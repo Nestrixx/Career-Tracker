@@ -1,13 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
-import "./App.css";
+import Card from "react-bootstrap/Card";
+import "./App.scss";
 
 function App() {
+  const [jobData, setJobData] = useState([]);
+  // const [jobName, setJobName] = useState([]);
+  // const [jobTitle, setJobTitle] = useState([]);
+  // const [jobURL, setJobURL] = useState([]);
+
   useEffect(() => {
     fetch("http://localhost:8000/jobData/")
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => setJobData(data));
   }, []);
+
+  useEffect(() => {
+    console.log(jobData);
+  });
+
+  function JobCard() {
+    return (
+      <Card style={{ width: "18rem" }}>
+        <Card.Body>
+          <Card.Title>Card Title</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">
+            Card Subtitle
+          </Card.Subtitle>
+          <Card.Link href="#">Card Link</Card.Link>
+        </Card.Body>
+      </Card>
+    );
+  }
 
   return (
     <div className="App">
@@ -24,6 +48,15 @@ function App() {
         >
           Learn React
         </a>
+        <Card border="light" bg="dark" style={{ width: "18rem" }}>
+          <Card.Body>
+            <Card.Title>Card Title</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">
+              Card Subtitle
+            </Card.Subtitle>
+            <Card.Link href="#">Card Link</Card.Link>
+          </Card.Body>
+        </Card>
       </header>
     </div>
   );
