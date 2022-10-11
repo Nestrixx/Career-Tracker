@@ -21,7 +21,6 @@ function App() {
   useEffect(() => {
     console.log(jobData, "hi");
   });
-
   return (
     <div className="App">
       <header className="App-header">
@@ -56,7 +55,9 @@ function App() {
                 <Card.Subtitle className="text-start mb-2 text-muted">
                   {job.title}
                 </Card.Subtitle>
-                <Card.Link href={job.url}>Job Page</Card.Link>
+                <Card.Link className="fs-4" href={job.url}>
+                  Job Page
+                </Card.Link>
               </Card.Body>
             </Card>
           ))}
