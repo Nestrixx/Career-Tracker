@@ -8,9 +8,11 @@ import Form from "react-bootstrap/Form";
 import "./App.scss";
 import { Job } from "./types/Job";
 
+import { format, parseJSON } from "date-fns";
+
 function App() {
   const [jobData, setJobData] = useState<Job[]>();
-  const [isSearching, setIsSearching] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:8000/jobData/")
@@ -19,8 +21,56 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log(jobData, "hi");
-  });
+    const isSearchInputEmpty = searchInput.length === 0;
+    if (isSearchInputEmpty) {
+      console.log("hi");
+    }
+    console.log(searchInput);
+  }, [searchInput]);
+
+  const updateSearchInput = (searchInput: string) => {
+    setSearchInput(searchInput);
+  };
+
+  const jobDateFormatHandler = (date: string) => {
+    return format(parseJSON(date), "PP");
+  };
+
+  const filteredJobList = () => {
+    const filteredJobList = jobData?.filter((job) =>
+      job.company.includes(searchInput)
+    );
+
+    console.log(filteredJobList);
+    return (
+      <div className="mx-4 gap-2 d-flex justify-content-evenly flex-wrap">
+        {filteredJobList?.map((job) => (
+          <Card
+            className="mb-2"
+            border="light"
+            bg="dark"
+            style={{ width: "18rem" }}
+          >
+            <Card.Body>
+              <Card.Title className="text-truncate fs-4 text-start">
+                {job.company}
+              </Card.Title>
+              <Card.Subtitle className="text-truncate text-start mb-2 text-muted">
+                {job.title}
+              </Card.Subtitle>
+              <div className="d-flex justify-content-between">
+                <Card.Link className="text-start fs-4" href={job.url}>
+                  Job Page
+                </Card.Link>
+                <div className="fs-5">{jobDateFormatHandler(job.date)}</div>
+              </div>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
+    );
+  };
+  filteredJobList();
   return (
     <div className="App">
       <header className="App-header">
@@ -42,25 +92,40 @@ function App() {
             </svg>
           </InputGroup.Text>
           <Form.Control
+            onChange={(event) => updateSearchInput(event.target.value)}
             className="border-start-0 shadow-none bg-white rounded-pill rounded-start"
             aria-label="Default"
             aria-describedby="inputGroup-sizing-default"
           />
         </InputGroup>
-        <div className="d-flex justify-content-evenly flex-wrap">
-          {jobData?.map((job) => (
-            <Card border="light" bg="dark" style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title className="text-start">{job.company}</Card.Title>
-                <Card.Subtitle className="text-start mb-2 text-muted">
-                  {job.title}
-                </Card.Subtitle>
-                <Card.Link className="fs-4" href={job.url}>
-                  Job Page
-                </Card.Link>
-              </Card.Body>
-            </Card>
-          ))}
+        <div className="mx-4 gap-2 d-flex justify-content-evenly flex-wrap">
+          {searchInput.length !== 0
+            ? filteredJobList()
+            : jobData?.map((job) => (
+                <Card
+                  className="mb-2"
+                  border="light"
+                  bg="dark"
+                  style={{ width: "18rem" }}
+                >
+                  <Card.Body>
+                    <Card.Title className="text-truncate fs-4 text-start">
+                      {job.company}
+                    </Card.Title>
+                    <Card.Subtitle className="text-truncate text-start mb-2 text-muted">
+                      {job.title}
+                    </Card.Subtitle>
+                    <div className="d-flex justify-content-between">
+                      <Card.Link className="text-start fs-4" href={job.url}>
+                        Job Page
+                      </Card.Link>
+                      <div className="fs-5">
+                        {jobDateFormatHandler(job.date)}
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              ))}
         </div>
       </header>
     </div>
