@@ -9,16 +9,20 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server(server is running)");
-});
 
 app.get("/jobData", async (req: Request, res: Response) => {
   const dbPath = path.join(__dirname, "../", "db.txt");
   const data = await fsPromises.readFile(dbPath, "utf8");
   return res.json(JSON.parse(data));
+});
+
+app.post("/addJob", async (req: Request, res: Response) => {
+  // something must go here but what
+  console.log(req.body);
+  res.send("got a POST request");
 });
 
 app.listen(port, () => {
