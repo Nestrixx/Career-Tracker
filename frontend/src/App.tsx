@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
 
 import Card from "react-bootstrap/Card";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -9,6 +8,10 @@ import "./App.scss";
 import { Job } from "./types/Job";
 
 import { format, parseJSON } from "date-fns";
+
+import "./fonts/nemoy/nemoy.light.otf";
+
+import emblem from "./images/logo/emblem.png";
 
 function App() {
   const [jobData, setJobData] = useState<Job[]>([]);
@@ -56,7 +59,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={emblem} alt="logo" />
+        <p className="fs-1 font-face-gm">My Application List</p>
         <InputGroup size="lg" className="mb-3 w-50">
           <InputGroup.Text
             className="pe-0 bg-white rounded-end rounded-pill"
