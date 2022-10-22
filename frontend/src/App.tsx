@@ -5,6 +5,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 
 import "./App.scss";
+
 import { Job } from "./types/Job";
 
 import { format, parseJSON } from "date-fns";
@@ -12,6 +13,7 @@ import { format, parseJSON } from "date-fns";
 import "./fonts/nemoy/nemoy.light.otf";
 
 import emblem from "./images/logo/emblem.png";
+import { Link } from "react-router-dom";
 
 function App() {
   const [jobData, setJobData] = useState<Job[]>([]);
@@ -58,9 +60,14 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={emblem} alt="logo" />
-        <p className="fs-1 font-face-gm">My Application List</p>
+      <div className="App-header">
+        <header>
+          <img src={emblem} alt="logo" />
+          <Link className="text-light fs-1 font-face-gm" to="/home">
+            Home Page
+          </Link>
+          <p className="fs-1 font-face-gm">My Application List</p>
+        </header>
         <InputGroup size="lg" className="mb-3 w-50">
           <InputGroup.Text
             className="pe-0 bg-white rounded-end rounded-pill"
@@ -84,32 +91,34 @@ function App() {
             aria-describedby="inputGroup-sizing-default"
           />
         </InputGroup>
-        <div className="mx-4 gap-2 d-flex justify-content-evenly flex-wrap">
-          {filteredJobList().map((job) => (
-            <Card
-              className="mb-2"
-              border="light"
-              bg="dark"
-              style={{ width: "18rem" }}
-            >
-              <Card.Body>
-                <Card.Title className="text-truncate fs-4 text-start">
-                  {job.company}
-                </Card.Title>
-                <Card.Subtitle className="text-truncate text-start mb-2 text-muted">
-                  {job.title}
-                </Card.Subtitle>
-                <div className="d-flex justify-content-between align-items-baseline">
-                  <Card.Link className="text-start fs-4" href={job.url}>
-                    Job Page
-                  </Card.Link>
-                  <div className="fs-5">{jobDateFormatHandler(job.date)}</div>
-                </div>
-              </Card.Body>
-            </Card>
-          ))}
+        <div className="w-100">
+          <div className="cardWrapper">
+            {filteredJobList().map((job) => (
+              <Card
+                className="mb-2"
+                border="light"
+                bg="dark"
+                style={{ width: "18rem" }}
+              >
+                <Card.Body>
+                  <Card.Title className="text-truncate fs-4 text-start">
+                    {job.company}
+                  </Card.Title>
+                  <Card.Subtitle className="text-truncate text-start mb-2 text-muted">
+                    {job.title}
+                  </Card.Subtitle>
+                  <div className="d-flex justify-content-between align-items-baseline">
+                    <Card.Link className="text-start fs-4" href={job.url}>
+                      Job Page
+                    </Card.Link>
+                    <div className="fs-5">{jobDateFormatHandler(job.date)}</div>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
         </div>
-      </header>
+      </div>
     </div>
   );
 }

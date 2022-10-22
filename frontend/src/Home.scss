@@ -1,0 +1,12 @@
+body {
+    background-color: #282c34;
+}
+
+@font-face {
+    font-family: "nemoy";
+    src: local("nemoy.light.otf"), url("./fonts/nemoy/nemoy.light.otf") format("truetype");
+}
+
+.font-face-gm {
+    font-family: "nemoy";
+}

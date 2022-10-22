@@ -20,9 +20,13 @@ app.get("/jobData", async (req: Request, res: Response) => {
 });
 
 app.post("/addJob", async (req: Request, res: Response) => {
-  // something must go here but what
-  console.log(req.body);
-  res.send("got a POST request");
+  req.body.date = new Date();
+  const dbPath = path.join(__dirname, "../", "db.txt");
+  const oldDbText = await fsPromises.readFile(dbPath, "utf8");
+  const newDbText = JSON.parse(oldDbText);
+  newDbText.push(req.body);
+  fsPromises.writeFile(dbPath, JSON.stringify(newDbText), "utf8");
+  return res.status(200).send(req.body);
 });
 
 app.listen(port, () => {

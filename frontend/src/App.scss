@@ -23,6 +23,14 @@
     }
 }
 
+.cardWrapper {
+    display: grid;
+    gap: 16px;
+    justify-content: center;
+    margin: 5rem;
+    grid-template-columns: repeat(auto-fill, 286px);
+}
+
 .App-header {
     background-color: #282c34;
     min-height: 100vh;
