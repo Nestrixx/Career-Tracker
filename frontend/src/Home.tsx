@@ -7,7 +7,6 @@ import "./fonts/nemoy/nemoy.light.otf";
 import emblem from "./images/logo/emblem.png";
 
 import { useState } from "react";
-import { stringify } from "querystring";
 import { Link } from "react-router-dom";
 
 const Home = () => {
@@ -21,16 +20,12 @@ const Home = () => {
   });
 
   // onChange={(event) => updateSearchInput(event.target.value)}
-  const jobFormSubmissionHandler = (
-    company: string,
-    title: string,
-    urlLink: string
-  ) => {
-    if (company.length !== 0 && title.length !== 0 && urlLink.length !== 0) {
+  const jobFormSubmissionHandler = () => {
+    if (jobTitle.length !== 0 && companyName.length !== 0 && url.length !== 0) {
       const client = {
-        url: urlLink,
-        company: company,
-        title: title,
+        url: url,
+        company: companyName,
+        title: jobTitle,
       };
       setCompanyName("");
       setJobTitle("");
@@ -53,10 +48,21 @@ const Home = () => {
 
       return;
     }
+
+    const isValidUrl = (testUrl: string) => {
+      let result: URL;
+      try {
+        result = new URL(testUrl);
+      } catch (_) {
+        return false;
+      }
+      return result.protocol === "http:" || result.protocol === "https:";
+    };
+    console.log(isValidUrl(url));
     setValidator({
-      url: urlLink.length === 0,
-      company: company.length === 0,
-      title: title.length === 0,
+      url: !isValidUrl(url),
+      company: companyName.length === 0,
+      title: jobTitle.length === 0,
     });
   };
   return (
@@ -113,12 +119,14 @@ const Home = () => {
               setCompanyName(event.target.value);
               if (validator.company)
                 setValidator((prev) => ({ ...prev, company: false }));
+              console.log(validator.company);
             }}
           />
           <Form.Control.Feedback type="invalid">
             Please enter a valid company Name.
           </Form.Control.Feedback>
         </InputGroup>
+
         <InputGroup hasValidation size="lg" className="mb-3 w-50">
           <InputGroup.Text
             className="pe-0 bg-white rounded-end rounded-pill"
@@ -138,6 +146,7 @@ const Home = () => {
               setUrl(event.target.value);
               if (validator.url)
                 setValidator((prev) => ({ ...prev, url: false }));
+              console.log(validator.url);
             }}
           />
           <Form.Control.Feedback type="invalid">
@@ -148,7 +157,7 @@ const Home = () => {
           variant="outline-light"
           size="lg"
           onClick={() => {
-            jobFormSubmissionHandler(companyName, url, jobTitle);
+            jobFormSubmissionHandler();
           }}
         >
           Submit New Job Info
