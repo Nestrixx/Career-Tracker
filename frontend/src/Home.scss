@@ -2,6 +2,12 @@ body {
     background-color: #282c34;
 }
 
+.dropdown-menu {
+    min-width: 1rem !important;
+    background: transparent;
+    border: none;
+}
+
 @font-face {
     font-family: "nemoy";
     src: local("nemoy.light.otf"), url("./fonts/nemoy/nemoy.light.otf") format("truetype");
@@ -9,4 +15,31 @@ body {
 
 .font-face-gm {
     font-family: "nemoy";
+}
+
+.list button {
+    animation: fadeIn 0.75s ease-in both;
+}
+
+.list button:nth-child(2) {
+    animation-delay: 0.75s;
+}
+
+.list button:nth-child(3) {
+    animation-delay: 1.5s;
+}
+
+.list button:nth-child(4) {
+    animation-delay: 2.25s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -20%, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
 }
