@@ -33,14 +33,6 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    const isSearchInputEmpty = searchInput.length === 0;
-    if (isSearchInputEmpty) {
-      console.log("hi");
-    }
-    console.log(searchInput);
-  }, [searchInput]);
-
   const updateSearchInput = (searchInput: string) => {
     setSearchInput(searchInput);
   };

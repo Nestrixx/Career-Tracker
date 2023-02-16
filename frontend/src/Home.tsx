@@ -30,7 +30,7 @@ const Home = () => {
       setCompanyName("");
       setJobTitle("");
       setUrl("");
-      console.log(client, JSON.stringify(client));
+
       fetch("http://localhost:8000/addJob/", {
         method: "POST",
         headers: {
@@ -39,9 +39,6 @@ const Home = () => {
         body: JSON.stringify(client),
       })
         .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-        })
         .catch((error) => {
           console.error("Error:", error);
         });
@@ -58,13 +55,13 @@ const Home = () => {
       }
       return result.protocol === "http:" || result.protocol === "https:";
     };
-    console.log(isValidUrl(url));
     setValidator({
       url: !isValidUrl(url),
       company: companyName.length === 0,
       title: jobTitle.length === 0,
     });
   };
+
   return (
     <div className="d-flex flex-column align-items-left">
       <div className="d-flex justify-content-between">
@@ -215,7 +212,6 @@ const Home = () => {
               setCompanyName(event.target.value);
               if (validator.company)
                 setValidator((prev) => ({ ...prev, company: false }));
-              console.log(validator.company);
             }}
           />
           <Form.Control.Feedback type="invalid">
@@ -242,7 +238,6 @@ const Home = () => {
               setUrl(event.target.value);
               if (validator.url)
                 setValidator((prev) => ({ ...prev, url: false }));
-              console.log(validator.url);
             }}
           />
           <Form.Control.Feedback type="invalid">
