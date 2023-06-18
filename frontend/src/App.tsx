@@ -58,6 +58,10 @@ function App() {
           <Link className="text-light fs-1 font-face-gm" to="/home">
             Home Page
           </Link>
+          <p className="fs-3 font-face-gm">
+            Number of jobs applied to{" "}
+            <span className="fw-bold">{jobData.length} </span>
+          </p>
           <p className="fs-1 font-face-gm">My Application List</p>
         </header>
         <InputGroup size="lg" className="mb-3 w-50">

@@ -96,7 +96,7 @@ const Home = () => {
                   </svg>
                 </a>
               </Dropdown.Item>
-              <Dropdown.Item className=" mb-2" as="button">
+              <Dropdown.Item className="mb-2" as="button">
                 <a
                   href="https://www.linkedin.com/in/christian-mckinney-b049a0116/"
                   target="_blank"
@@ -115,7 +115,7 @@ const Home = () => {
                   </svg>
                 </a>
               </Dropdown.Item>
-              <Dropdown.Item className=" mb-2" as="button">
+              <Dropdown.Item className="mb-2" as="button">
                 <a
                   href="https://nestrixx.github.io/alarm-clock/#/alarms"
                   target="_blank"
