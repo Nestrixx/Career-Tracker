@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Card from "react-bootstrap/Card";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -55,9 +55,14 @@ function App() {
       <div className="App-header">
         <header>
           <img src={emblem} alt="logo" />
-          <Link className="text-light fs-1 font-face-gm" to="/home">
-            Home Page
-          </Link>
+          <div className="linkOptions">
+            <Link className="text-light fs-1 font-face-gm link" to="/stats">
+              More Info
+            </Link>
+            <Link className="text-light fs-1 font-face-gm link" to="/home">
+              Home Page
+            </Link>
+          </div>
           <p className="fs-3 font-face-gm">
             Number of jobs applied to{" "}
             <span className="fw-bold">{jobData.length} </span>

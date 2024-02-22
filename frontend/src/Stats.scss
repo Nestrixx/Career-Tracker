@@ -1,0 +1,19 @@
+@font-face {
+    font-family: "nemoy";
+    src: local("nemoy.light.otf"), url("./fonts/nemoy/nemoy.light.otf") format("truetype");
+}
+
+.contentWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: nemoy;
+    font-size: 2.5rem;
+    color: white;
+    margin: 25px;
+}
+
+.chart{
+
+}
