@@ -12,8 +12,26 @@
     font-size: 2.5rem;
     color: white;
     margin: 25px;
+    text-align: center;
+}
+
+.tital{
+    margin-bottom: 5rem;
+}
+
+.yearSelectorDropdown .dropdown-item{
+    color: white;
+}
+.yearSelectorDropdown .dropdown-item:hover{
+    color: black;
+}
+
+.yearSelectorDropdown{
+    border: 1px solid white;
+    background-color: #282c34;
 }
 
 .chart{
-
+    font-size: 1rem;
 }
+

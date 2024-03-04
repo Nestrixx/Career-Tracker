@@ -1,26 +1,17 @@
 import { useState, useEffect } from "react";
 import "./Stats.scss";
-import { PieChart } from "@mui/x-charts/PieChart";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { Job } from "./types/Job";
+import { MonthMap } from "./types/monthMap";
+import { Dropdown } from "react-bootstrap";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
+import { LineChart } from "@mui/x-charts/LineChart";
+import { cheerfulFiestaPaletteLight } from "@mui/x-charts/colorPalettes";
+
 
 function Stats() {
-  interface MonthMap {
-    january: number;
-    february: number;
-    march: number;
-    april: number;
-    may: number;
-    june: number;
-    july: number;
-    august: number;
-    september: number;
-    october: number;
-    november: number;
-    december: number;
-  }
 
-  let theCurrentYear = new Date().getUTCFullYear();
-
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getUTCFullYear());
   const [jobData, setJobData] = useState<Job[]>([]);
   const [mapOfTheMonths, setMapOfTheMonths] = useState<MonthMap>({
     january: 0,
@@ -37,8 +28,10 @@ function Stats() {
     december: 0,
   });
 
+  const [yearsTrackingApplications, setYearsTrackingApplications] = useState<number[]>([]);
+
   useEffect(() => {
-    fetch("http://localhost:8000/jobData/")
+    fetch("http://localhost:8080/jobData/")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -54,8 +47,15 @@ function Stats() {
   }, []);
 
   useEffect(() => {
-    let filteredJobData = jobData.filter(
-      (element) => element.date.substring(0, 4) === theCurrentYear.toString()
+    for (let i = 0; i < jobData.length; i++) {
+      let currentElementYear = new Date(jobData[i].date);
+      if (!yearsTrackingApplications.includes(currentElementYear.getFullYear())) {
+        yearsTrackingApplications.push(currentElementYear.getFullYear());
+      }
+    }
+
+    let filteredJobDataForCurrentYear = jobData.filter(
+      (element) => ((new Date(element.date).getFullYear()) === selectedYear)
     );
 
     const newMonthMap: MonthMap = {
@@ -73,8 +73,8 @@ function Stats() {
       december: 0,
     };
 
-    for (let i = 0; i < filteredJobData.length; i++) {
-      let jobDate = new Date(filteredJobData[i].date);
+    for (let i = 0; i < filteredJobDataForCurrentYear.length; i++) {
+      let jobDate = new Date(filteredJobDataForCurrentYear[i].date);
       let applicationMonth = jobDate.getMonth();
 
       switch (applicationMonth) {
@@ -126,36 +126,37 @@ function Stats() {
           newMonthMap.december += 1;
           break;
       }
+
+      console.log(...Object.keys(mapOfTheMonths));
+
     }
     setMapOfTheMonths(newMonthMap);
-  }, [jobData, theCurrentYear]);
+  }, [jobData, selectedYear]);
 
-  console.log(mapOfTheMonths);
+
 
   return (
     <div className="contentWrapper">
-      <p>
-        A current breakdown of job applications by month for {theCurrentYear}
+      <p className="tital">
+        A current breakdown of job applications by month for
+        <Dropdown className="mt-3 me-3n " >
+          <Dropdown.Toggle size="lg" variant="outline-light" id="dropdown-basic">
+            {selectedYear}
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu className="yearSelectorDropdown">
+            {yearsTrackingApplications.map(year => (
+              <DropdownItem key={year} onClick={() => { setSelectedYear(year) }}>{year}</DropdownItem>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
       </p>
       <PieChart
         className="chart"
-        colors={[
-          "#000000",
-          "#69C28E",
-          "#6CA885",
-          "#60DB94",
-          "#6A8F79",
-          "#63756A",
-          "#4F5C54",
-          "#324239",
-          "#223329",
-          "#1D3326",
-          "#003315",
-          "#FFFFFF",
-        ]}
         series={[
           {
             arcLabel: (item) => `${item.label} (${item.value})`,
+            arcLabelMinAngle: 45,
             data: [
               { id: 1, value: mapOfTheMonths.january, label: "January" },
               { id: 2, value: mapOfTheMonths.february, label: "February" },
@@ -172,8 +173,39 @@ function Stats() {
             ],
           },
         ]}
+        slotProps={{
+          legend: {
+            labelStyle: {
+              fontSize: 14,
+              fill: 'white',
+            },
+          },
+        }}
+        sx={{
+          [`& .${pieArcLabelClasses.root}`]: {
+            fill: 'white',
+            fontWeight: 'bold',
+            fontSize: 17,
+          },
+        }}
         width={600}
         height={400}
+      />
+      <LineChart
+        xAxis={[{ scaleType: 'point', data: [...Object.keys(mapOfTheMonths)] }]}
+        series={[
+          {
+            data: [...Object.values(mapOfTheMonths)],
+          },
+        ]}
+        width={800}
+        height={600}
+        colors={cheerfulFiestaPaletteLight}
+        sx={{
+          '.': {
+            fill: 'white',
+          },
+        }}
       />
     </div>
   );
