@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Stats.scss";
-import { PieChart } from "@mui/x-charts/PieChart";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { Job } from "./types/Job";
 
 function Stats() {
@@ -130,32 +130,19 @@ function Stats() {
     setMapOfTheMonths(newMonthMap);
   }, [jobData, theCurrentYear]);
 
-  console.log(mapOfTheMonths);
-
   return (
     <div className="contentWrapper">
       <p>
         A current breakdown of job applications by month for {theCurrentYear}
       </p>
+      <div className="chartWrapper">
       <PieChart
         className="chart"
-        colors={[
-          "#000000",
-          "#69C28E",
-          "#6CA885",
-          "#60DB94",
-          "#6A8F79",
-          "#63756A",
-          "#4F5C54",
-          "#324239",
-          "#223329",
-          "#1D3326",
-          "#003315",
-          "#FFFFFF",
-        ]}
+
         series={[
           {
             arcLabel: (item) => `${item.label} (${item.value})`,
+            arcLabelMinAngle: 45,
             data: [
               { id: 1, value: mapOfTheMonths.january, label: "January" },
               { id: 2, value: mapOfTheMonths.february, label: "February" },
@@ -172,9 +159,16 @@ function Stats() {
             ],
           },
         ]}
-        width={600}
-        height={400}
+        sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+              fill: 'white',
+              fontWeight: 'bold',
+            },
+          }}
+        width={800}
+        height={600}
       />
+      </div>
     </div>
   );
 }
