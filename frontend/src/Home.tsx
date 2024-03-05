@@ -66,7 +66,7 @@ const Home = () => {
   return (
     <div className="d-flex flex-column align-items-left">
       <div className="d-flex justify-content-between">
-        <Link to="/">
+        <Link className="backRouteButton" to="/">
           <img src={emblem} alt="logo" width="150" height="150"></img>
         </Link>
         <DropdownMenu></DropdownMenu>

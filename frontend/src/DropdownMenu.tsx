@@ -5,7 +5,7 @@ function DropdownMenu () {
 return(
     <Dropdown className="mt-3 me-3">
     <Dropdown.Toggle variant="outline-light" id="dropdown-basic">
-      Projects
+      Socials
     </Dropdown.Toggle>
 
     <Dropdown.Menu
