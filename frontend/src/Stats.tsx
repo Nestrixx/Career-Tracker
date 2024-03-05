@@ -2,25 +2,15 @@ import { useState, useEffect } from "react";
 import "./Stats.scss";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { Job } from "./types/Job";
+import { MonthMap } from "./types/monthMap";
+import { Dropdown } from "react-bootstrap";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
+import { LineChart } from "@mui/x-charts/LineChart";
 
 function Stats() {
-  interface MonthMap {
-    january: number;
-    february: number;
-    march: number;
-    april: number;
-    may: number;
-    june: number;
-    july: number;
-    august: number;
-    september: number;
-    october: number;
-    november: number;
-    december: number;
-  }
-
-  let theCurrentYear = new Date().getUTCFullYear();
-
+  const [selectedYear, setSelectedYear] = useState<number>(
+    new Date().getUTCFullYear()
+  );
   const [jobData, setJobData] = useState<Job[]>([]);
   const [mapOfTheMonths, setMapOfTheMonths] = useState<MonthMap>({
     january: 0,
@@ -36,6 +26,10 @@ function Stats() {
     november: 0,
     december: 0,
   });
+
+  const [yearsTrackingApplications, setYearsTrackingApplications] = useState<
+    number[]
+  >([]);
 
   useEffect(() => {
     fetch("http://localhost:8000/jobData/")
@@ -54,8 +48,17 @@ function Stats() {
   }, []);
 
   useEffect(() => {
-    let filteredJobData = jobData.filter(
-      (element) => element.date.substring(0, 4) === theCurrentYear.toString()
+    for (let i = 0; i < jobData.length; i++) {
+      let currentElementYear = new Date(jobData[i].date);
+      if (
+        !yearsTrackingApplications.includes(currentElementYear.getFullYear())
+      ) {
+        yearsTrackingApplications.push(currentElementYear.getFullYear());
+      }
+    }
+
+    let filteredJobDataForCurrentYear = jobData.filter(
+      (element) => new Date(element.date).getFullYear() === selectedYear
     );
 
     const newMonthMap: MonthMap = {
@@ -73,8 +76,8 @@ function Stats() {
       december: 0,
     };
 
-    for (let i = 0; i < filteredJobData.length; i++) {
-      let jobDate = new Date(filteredJobData[i].date);
+    for (let i = 0; i < filteredJobDataForCurrentYear.length; i++) {
+      let jobDate = new Date(filteredJobDataForCurrentYear[i].date);
       let applicationMonth = jobDate.getMonth();
 
       switch (applicationMonth) {
@@ -126,48 +129,122 @@ function Stats() {
           newMonthMap.december += 1;
           break;
       }
+
+      console.log(...Object.keys(mapOfTheMonths));
     }
     setMapOfTheMonths(newMonthMap);
-  }, [jobData, theCurrentYear]);
+  }, [jobData, mapOfTheMonths, selectedYear, yearsTrackingApplications]);
 
   return (
     <div className="contentWrapper">
-      <p>
-        A current breakdown of job applications by month for {theCurrentYear}
+      <p className="tital">
+        A current breakdown of job applications by month for
+        <Dropdown className="mt-3 me-3n ">
+          <Dropdown.Toggle
+            size="lg"
+            variant="outline-light"
+            id="dropdown-basic"
+          >
+            {selectedYear}
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu className="yearSelectorDropdown">
+            {yearsTrackingApplications.map((year) => (
+              <DropdownItem
+                key={year}
+                onClick={() => {
+                  setSelectedYear(year);
+                }}
+              >
+                {year}
+              </DropdownItem>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
       </p>
       <div className="chartWrapper">
-      <PieChart
-        className="chart"
-
-        series={[
-          {
-            arcLabel: (item) => `${item.label} (${item.value})`,
-            arcLabelMinAngle: 45,
-            data: [
-              { id: 1, value: mapOfTheMonths.january, label: "January" },
-              { id: 2, value: mapOfTheMonths.february, label: "February" },
-              { id: 3, value: mapOfTheMonths.march, label: "March" },
-              { id: 4, value: mapOfTheMonths.april, label: "April" },
-              { id: 5, value: mapOfTheMonths.may, label: "May" },
-              { id: 6, value: mapOfTheMonths.june, label: "June" },
-              { id: 7, value: mapOfTheMonths.july, label: "July" },
-              { id: 8, value: mapOfTheMonths.august, label: "August" },
-              { id: 9, value: mapOfTheMonths.september, label: "September" },
-              { id: 10, value: mapOfTheMonths.october, label: "October" },
-              { id: 11, value: mapOfTheMonths.november, label: "November" },
-              { id: 12, value: mapOfTheMonths.december, label: "December" },
-            ],
-          },
-        ]}
-        sx={{
-            [`& .${pieArcLabelClasses.root}`]: {
-              fill: 'white',
-              fontWeight: 'bold',
+        <PieChart
+          className="chart"
+          series={[
+            {
+              arcLabel: (item) => `${item.label} (${item.value})`,
+              arcLabelMinAngle: 45,
+              data: [
+                { id: 1, value: mapOfTheMonths.january, label: "January" },
+                { id: 2, value: mapOfTheMonths.february, label: "February" },
+                { id: 3, value: mapOfTheMonths.march, label: "March" },
+                { id: 4, value: mapOfTheMonths.april, label: "April" },
+                { id: 5, value: mapOfTheMonths.may, label: "May" },
+                { id: 6, value: mapOfTheMonths.june, label: "June" },
+                { id: 7, value: mapOfTheMonths.july, label: "July" },
+                { id: 8, value: mapOfTheMonths.august, label: "August" },
+                { id: 9, value: mapOfTheMonths.september, label: "September" },
+                { id: 10, value: mapOfTheMonths.october, label: "October" },
+                { id: 11, value: mapOfTheMonths.november, label: "November" },
+                { id: 12, value: mapOfTheMonths.december, label: "December" },
+              ],
+            },
+          ]}
+          slotProps={{
+            legend: {
+              labelStyle: {
+                fontSize: 14,
+                fill: "white",
+              },
             },
           }}
-        width={800}
-        height={600}
-      />
+          sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+              fill: "white",
+              fontWeight: "bold",
+              fontSize: 17,
+            },
+          }}
+          width={800}
+          height={600}
+        />
+        <LineChart
+          xAxis={[
+            { scaleType: "point", data: [...Object.keys(mapOfTheMonths)] },
+          ]}
+          series={[
+            {
+              data: [...Object.values(mapOfTheMonths)],
+              label: "Number of applications per month",
+            },
+          ]}
+          slotProps={{
+            legend: {
+                labelStyle:{
+                    fill: 'white',
+                }
+            }
+          }}
+          width={800}
+          height={600}
+          sx={{
+            //change left yAxis label styles
+            "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel": {
+              strokeWidth: "0.4",
+              fill: "#FFFFFF",
+            },
+            // change bottom label styles
+            "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": {
+              strokeWidth: "0.5",
+              fill: "#FFFFFF",
+            },
+            // bottomAxis Line Styles
+            "& .MuiChartsAxis-bottom .MuiChartsAxis-line": {
+              stroke: "#FFFFFF",
+              strokeWidth: 1,
+            },
+            // leftAxis Line Styles
+            "& .MuiChartsAxis-left .MuiChartsAxis-line": {
+              stroke: "#FFFFFF",
+              strokeWidth: 1    ,
+            },
+          }}
+        />
       </div>
     </div>
   );
