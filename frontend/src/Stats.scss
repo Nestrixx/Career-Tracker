@@ -7,12 +7,20 @@
     font-family: nemoy;
     font-size: 2.5rem;
     color: white;
-    margin: 25px;
     text-align: center;
 }
 
-.tital{
-    margin-bottom: 5rem;
+.titleWrapper{
+    margin-bottom: 4rem;
+}
+
+.titleText{
+    display: inline;
+    margin-right: 12px;
+}
+
+.yearDropdown{
+    display: inline;
 }
 
 .yearSelectorDropdown .dropdown-item{
@@ -25,6 +33,18 @@
 .yearSelectorDropdown{
     border: 1px solid white;
     background-color: #282c34;
+}
+
+.graphTitleWrapper{
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.graphSelectButton{
+    border: none;
+    border-bottom: 1px solid white;
+    background-color: #282c34;
+    color: white;
 }
 
 .chartWrapper{

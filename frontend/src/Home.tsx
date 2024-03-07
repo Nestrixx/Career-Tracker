@@ -4,11 +4,9 @@ import "./Home.scss";
 
 import "./fonts/nemoy/nemoy.light.otf";
 
-import emblem from "./images/logo/emblem.png";
-
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import DropdownMenu from "./DropdownMenu";
+
+import Navbar from "./Navbar";
 
 const Home = () => {
   const [companyName, setCompanyName] = useState("");
@@ -66,10 +64,7 @@ const Home = () => {
   return (
     <div className="d-flex flex-column align-items-left">
       <div className="d-flex justify-content-between">
-        <Link className="backRouteButton" to="/">
-          <img src={emblem} alt="logo" width="150" height="150"></img>
-        </Link>
-        <DropdownMenu></DropdownMenu>
+        <Navbar></Navbar>
       </div>
       <div className="gap-2 d-flex flex-column align-items-center h-100vh w-100 text-white bg-opacity-75">
         <p className="fs-1 font-face-gm">New Job application</p>
